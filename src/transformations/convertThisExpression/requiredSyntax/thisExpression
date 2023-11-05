@@ -1,0 +1,85 @@
+export default {
+    props: {
+        value: {
+            type: String,
+            required: true
+        },
+        university: {
+            type: Object,
+        }
+    },
+    data() {
+        return {
+            isDropdownOpen: false,
+            user: {
+                name: 'jerry',
+                value: age.value
+            }
+        };
+    },
+    computed: {
+        ...mapState('documents', ['documents']),
+        ...mapState('documents', {
+            activeAccordian: 'activeAccordian'
+        }),
+        ...mapState({
+            menu: 'documents/menu'
+        }),
+        ...mapGetters('documents', ['filteredDocuments']),
+        ...mapGetters({
+            isGuestUser: "auth/isGuestUser",
+            user: "auth/getUser",
+        }),
+        activeMenu() {
+            return documents.value.find(item => item.active);
+        },
+        showUser() {
+            return filteredDocuments.value?.name === 'Application' && isGuestUser.value;
+        },
+        isNewUser() {
+            return route.query?.doc === 'finance';
+        },
+    },
+    methods: {
+        onClick(option) {
+            emit('input', option.value);
+            emit('on-change', option);
+            isDropdownOpen.value = false;
+            const newValue = documents.value
+            dropdownOptions.value.dropdownOptions.style.setProperty('--dd-left', `-${left}px`);
+            newUser.value;
+            addUser();
+            isKSUser.value;
+            editUserDetails(payload);
+            // TODO Change axios call
+                  // this.$axios.get('test')
+                .then((response) => {
+                    console.log(response)
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+        },
+        setDropDownLocation() {
+            const rect = customDropdown.value.customDropdown.getBoundingClientRect();
+        }
+    },
+    mounted() {
+        emit('input', option.value);
+        emit('on-change', option);
+        isDropdownOpen.value = false;
+        const newValue = documents.value
+    },
+    beforeDestroy() {
+        emit('input', option.value);
+        emit('on-change', option);
+        isDropdownOpen.value = false;
+        const newValue = documents.value
+    },
+    destroyed() {
+        emit('input', option.value);
+        emit('on-change', option);
+        isDropdownOpen.value = false;
+        const newValue = documents.value
+    },
+}
