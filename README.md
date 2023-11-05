@@ -32,11 +32,11 @@ At the end of transformation it will show result for the number of files that ar
 
 For all the files which were not transformed you will get a location to 'files-to-migrate-manually.json' this json has list of all files which are not transformed and for such files migration to new code needs to be done manually.
 
-![Alt text](public/image.png)
+![Alt text](https://github.com/bippan1407/vue-migration/blob/main/public/image.png?raw=true)
 
 ## Does it convert all the code to the latest syntax?
 
-vue-migration tries to convert most of the code that is necessary reducing manual efforts spend by devs to update to latest stack.
+vue-migration tries to convert most of the code th  at is necessary reducing manual efforts spend by devs to update to latest stack.
 
 props, watch, data(), computed, emits, lifecychooks, $refs, $router, $route, $device, layout(nuxt 2) are converted to new vue 3 composition api syntax.
 
