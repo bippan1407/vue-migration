@@ -13,8 +13,6 @@ const transform = ({ root, j, vueFileData }) => {
   let vuexStateGetters = getVuexStateAndGetterArray(vueFileData.vuexGetters);
   let vuexActions = getVuexStateAndGetterArray(vueFileData.vuexActions);
   vuexStateGetters = Array.from(vuexStateGetters);
-  convertThisStoreGetters({ root, j });
-  convertThisStoreDispatch({ root, j });
   convertNuxtProperties({ root, j });
   root.find(j.ThisExpression).forEach((path) => {
     const propertyName = path.parent?.value?.property?.name;
@@ -41,17 +39,24 @@ const transform = ({ root, j, vueFileData }) => {
       if (componentRefNames.includes(name))
         j(path.parent).replaceWith(() => getRefSyntax(name));
     } else if (["$axios"].includes(propertyName)) {
-      j(path.parent.parent).replaceWith((path) => {
-        return `// TODO Change axios call
-      // ${j(path).toSource()}`;
+      j(path.parent.parent).forEach((path) => {
+        path.value.comments = [
+          j.commentLine("TODO Need to migrate manually", false, true),
+        ];
+        // return j(path).toSource();
       });
     } else {
-      j(path.parent.parent).replaceWith((path) => {
-        return `// TODO Need to migrate manually
-        // ${j(path).toSource()}`;
+      j(path.parent.parent).forEach((path) => {
+        path.value.comments = [
+          j.commentLine("TODO Need to migrate manually", false, true),
+        ];
+        // return `// TODO Need to migrate manually
+        // // ${j(path).toSource()}`;
       });
     }
   });
+  convertThisStoreGetters({ root, j });
+  convertThisStoreDispatch({ root, j });
 };
 
 const getVuexStateAndGetterArray = (vuexStateGetters) => {

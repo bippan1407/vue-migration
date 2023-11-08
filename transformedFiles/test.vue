@@ -15,7 +15,14 @@ const emit = defineEmits(["on-redirect"])
 
 // #region props
 const props = defineProps({
-    name: 'vue-migration',
+    name: {
+        type: String,
+        required: true
+    },
+    user: {
+        type: Object,
+        required: true
+    }
 })
 // #endregion props
 
@@ -31,7 +38,7 @@ const userStore = useUserStore()
 const devStore = useDevStore()
 const { isDeveloper, isManager, devName } = storeToRefs(userStore)
 const { addDeveloper } = developerStore
-const { addNewUser: createNewUser } = userStore
+const { addNewUser: createNewUser, createUser } = userStore
 const { onDescriptionChangeByDev } = devStore
 
 // #endregion pinia state, getters and actions
@@ -51,7 +58,7 @@ const nameAndDescription = computed(() => {
 
 
 // #region watch
-watch(description, (newValue, oldValue) => {
+watch(description, (newValue,oldValue) => {
     onDescriptionChange()
 })
 
@@ -59,7 +66,9 @@ watch(description, (newValue, oldValue) => {
 
 
 // #region methods
-const onDescriptionChange = () => {
+const onDescriptionChange = async () => {
+    await createUser(props.user.id);
+    props.user.id
     const devName = devName.value
     console.log('decription is changed')
     onDescriptionChangeByDev({ developerName: devName });
@@ -74,15 +83,15 @@ const onRedirect = () => {
 
 
 // #region lifecycle hooks
-onMounted(() => {
-    const response = // TODO Change axios call
-        // this.$axios.$get('/user')
-        console.log('component mounted')
-    // TODO Need to migrate manually
-    // this.$once('hook:beforDestroy', () => {
-    // });
+onMounted(() =>  {
+    const response = //TODO Need to migrate manually
+    this.$axios.$get('/user')
+    console.log('component mounted')
+    //TODO Need to migrate manually
+    this.$once('hook:beforDestroy', () => {
+    });
 })
-onDestroyed(() => {
+onDestroyed(() =>  {
     console.log('component destroyed')
 })
 

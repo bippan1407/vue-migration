@@ -6,7 +6,14 @@ import { mapGetters, mapActions, mapState } from 'vuex';
 export default {
     name: 'VueMigration',
     props: {
-        name: 'vue-migration',
+        name: {
+            type: String,
+            required: true
+        },
+        user: {
+            type: Object,
+            required: true
+        }
     },
     data() {
         return {
@@ -43,7 +50,9 @@ export default {
         ...mapActions({
             createNewUser: "user/addNewUser",
         }),
-        onDescriptionChange() {
+        async onDescriptionChange() {
+            await this.$store.dispatch("user/createUser", this.user.id);
+            this.user.id
             const devName = this.$store.getters['user/devName']
             console.log('decription is changed')
             this.$store.dispatch('dev/onDescriptionChangeByDev', { developerName: devName })

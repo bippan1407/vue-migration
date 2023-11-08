@@ -13,7 +13,7 @@ test("remove this expression", () => {
   const testFile = path.resolve(__dirname, "test.vue");
   const requiredSyntaxFileLocation = path.resolve(
     __dirname,
-    "./requiredSyntax/thisExpression"
+    "./requiredSyntax/thisExpression.txt"
   );
   const requiredSyntax = fs.readFileSync(requiredSyntaxFileLocation, {
     encoding: "utf8",
@@ -21,5 +21,6 @@ test("remove this expression", () => {
   codemod.initialiseFile(testFile);
   transformations.convertThisExpression(codemod.transformationObject);
   const transformedValue = codemod.getSource().trim();
+  console.log(transformedValue);
   expect(transformedValue).toEqual(requiredSyntax);
 });

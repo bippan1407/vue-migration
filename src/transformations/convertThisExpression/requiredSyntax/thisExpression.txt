@@ -51,8 +51,8 @@ export default {
             addUser();
             isKSUser.value;
             editUserDetails(payload);
-            // TODO Change axios call
-                  // this.$axios.get('test')
+            //TODO Need to migrate manually
+            this.$axios.get('test')
                 .then((response) => {
                     console.log(response)
                 })
