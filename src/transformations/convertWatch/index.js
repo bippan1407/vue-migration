@@ -23,7 +23,12 @@ const transform = ({ root, j }) => {
         const watcherName = property?.key?.name;
         const expression = property.value;
         if (expression.type === j.ObjectExpression.name) {
-          let [functionExpression, options] = expression.properties;
+          let functionExpression = expression.properties.find(
+            (property) => property.key.name === "handler"
+          );
+          let options = expression.properties.find(
+            (property) => property.key.name !== "handler"
+          );
           functionExpression = functionExpression.value;
           newWatchSyntax +=
             getSyntax(j, watcherName, functionExpression, options) + "\n";
