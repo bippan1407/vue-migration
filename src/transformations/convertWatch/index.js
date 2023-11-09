@@ -12,7 +12,7 @@ const getSyntax = (j, watcherName, functionExpression, options) => {
   return createWatchSyntax(watcherName, params, body, watcherOption);
 };
 
-const transform = ({ root, j }) => {
+const transform = ({ root, j, vueFileData }) => {
   let newWatchSyntax = "";
   root
     .find(j.Property, {
@@ -20,7 +20,11 @@ const transform = ({ root, j }) => {
     })
     .forEach((path) => {
       path?.value?.value?.properties?.forEach((property) => {
-        const watcherName = property?.key?.name;
+        let watcherName = property?.key?.name;
+        vueFileData;
+        if (vueFileData.propNames.includes(watcherName)) {
+          watcherName = `props.${watcherName}`;
+        }
         const expression = property.value;
         if (expression.type === j.ObjectExpression.name) {
           let functionExpression = expression.properties.find(
