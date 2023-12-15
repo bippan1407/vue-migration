@@ -1,6 +1,6 @@
 {
   "name": "vue-migration",
-  "version": "1.0.15",
+  "version": "1.0.16",
   "description": "codemod from nuxt 2(vue 2 syntax) code to nuxt 3(vue 3 composition api).",
   "main": "index.js",
   "scripts": {
