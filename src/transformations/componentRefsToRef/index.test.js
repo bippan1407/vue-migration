@@ -14,6 +14,8 @@ test("convert component this.$ref to ref.value", () => {
   transformations.componentRefToRefs(codemod.transformationObject);
   const newSyntax = codemod.getSource().trim();
   expect(newSyntax).toBe(
-    "dropdownOptions.value.style.setProperty('--dd-left', `-${left}px`);"
+    `dropdownOptions.value.style.setProperty('--dd-left', \`-\${left}px\`);
+dropdownOptions.value.style.setProperty('--dd-left', \`-\${left}px\`);
+dropdownOptions.value[0].style.setProperty('--dd-left', \`-\${left}px\`);`
   );
 });
