@@ -91,7 +91,7 @@ const transform = ({ root, j }) => {
       const nodeArguments = path?.parent?.parent?.value?.arguments;
       // fist literal should have store and action name
       const [storeName, currentActionName] =
-        nodeArguments?.[0]?.value.split("/");
+        nodeArguments?.[0]?.value?.split("/") ?? [];
       const objectExpression = nodeArguments.find(
         (arg) => arg.type === j.ObjectExpression.name
       );
