@@ -46,7 +46,7 @@ export default {
             emit('on-change', option);
             isDropdownOpen.value = false;
             const newValue = documents.value
-            dropdownOptions.value.dropdownOptions.style.setProperty('--dd-left', `-${left}px`);
+            dropdownOptions.value.style.setProperty('--dd-left', `-${left}px`);
             newUser.value;
             addUser();
             isKSUser.value;
@@ -61,7 +61,7 @@ export default {
                 })
         },
         setDropDownLocation() {
-            const rect = customDropdown.value.customDropdown.getBoundingClientRect();
+            const rect = customDropdown.value.getBoundingClientRect();
         }
     },
     mounted() {

@@ -1,6 +1,7 @@
 const convertThisStoreGetters = require("../convertThisStoreGetters");
 const { getRefSyntax } = require("../../utility/vueThreeSyntax");
 const convertThisStoreDispatch = require("../convertThisStoreDispatch");
+const componentRefToRefs = require("../componentRefsToRef");
 const convertNuxtProperties = require("../convertNuxtProperties");
 const { nuxtPropertiesToConvert } = require("../../utility");
 
@@ -35,9 +36,7 @@ const transform = ({ root, j, vueFileData }) => {
     } else if (["$emit"].includes(propertyName)) {
       j(path.parent).replaceWith(`emit`);
     } else if (["$refs"].includes(propertyName)) {
-      const name = path.parent.parent.value.property.name;
-      if (componentRefNames.includes(name))
-        j(path.parent).replaceWith(() => getRefSyntax(name));
+      componentRefToRefs({ root, j });
     } else if (["$axios"].includes(propertyName)) {
       j(path.parent.parent).forEach((path) => {
         path.value.comments = [
