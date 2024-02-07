@@ -10,31 +10,24 @@ const {
 } = require("./utility");
 const path = require("path");
 const chalk = require("chalk");
+const configOptionsService = require("./configOptionsService");
 
 const { argv } = yargs;
-
-const projectLocation = argv["projectLocation"];
-const transformedFolderLocation = argv["transformFolder"];
-let dryRun = argv["dryRun"];
-let emptyTransformFolder = argv["emptyTransformFolder"];
-let saveErrorLogs = argv["saveErrorLogs"];
-
-if (dryRun === "false") {
-  dryRun = false;
+let configOptions = {};
+const configLocation = argv["configLocation"];
+if (configLocation) {
+  configOptionsService().initialise(require(configLocation));
+  configOptions = configOptionsService().get();
 } else {
-  dryRun = true;
-}
-
-if (emptyTransformFolder === "true") {
-  emptyTransformFolder = true;
-} else {
-  emptyTransformFolder = false;
-}
-
-if (saveErrorLogs === "true") {
-  saveErrorLogs = true;
-} else {
-  saveErrorLogs = false;
+  configOptions.projectLocation = argv["projectLocation"];
+  configOptions.transformedFolderLocation = argv["transformFolder"];
+  configOptions.dryRun = Boolean(argv["configOptions.dryRun"]);
+  configOptions.emptyTransformFolder = Boolean(
+    argv["configOptions.emptyTransformFolder"]
+  );
+  configOptions.saveErrorLogs = Boolean(argv["configOptions.saveErrorLogs"]);
+  configOptionsService().initialise(configOptions);
+  configOptions = configOptionsService().get();
 }
 
 const filesToMigrateManually = [];
@@ -51,8 +44,8 @@ const main = (file) => {
     let codemodTransform = new Codemod();
 
     codemodTransform.initialiseFile(file, {
-      transformedFolderLocation,
-      shouldTransformMainFile: !dryRun,
+      transformedFolderLocation: configOptions.transformedFolderLocation,
+      shouldTransformMainFile: !configOptions.dryRun,
     });
     console.log(chalk.greenBright("completed processing file - ", fileName));
     filesMigrated++;
@@ -68,7 +61,7 @@ const main = (file) => {
     // console.log(chalk.redBright(error.message));
     // console.log(chalk.redBright(error.stack));
 
-    if (saveErrorLogs) {
+    if (configOptions.saveErrorLogs) {
       filesToMigrateManually.push({
         fileName: file,
         errorMessage: error.message,
@@ -81,25 +74,25 @@ const main = (file) => {
 };
 
 function startTransformation(baseFolderLocation) {
-  if (!projectLocation) {
+  if (!configOptions.projectLocation) {
     console.log(
       chalk.redBright("Please provide absolute path to project location")
     );
     return;
   }
   console.log(chalk.greenBright("Process initiated\n"));
-  if (transformedFolderLocation) {
-    const folder = fs.readdirSync(transformedFolderLocation);
+  if (configOptions.transformedFolderLocation) {
+    const folder = fs.readdirSync(configOptions.transformedFolderLocation);
     const subdirectoriesAndFiles = folder.filter((file) => {
-      const fullPath = `${transformedFolderLocation}/${file}`;
+      const fullPath = `${configOptions.transformedFolderLocation}/${file}`;
       return (
         fs.statSync(fullPath).isDirectory() || fs.statSync(fullPath).isFile()
       );
     });
     if (subdirectoriesAndFiles.length !== 0) {
-      if (emptyTransformFolder) {
+      if (configOptions.emptyTransformFolder) {
         console.log(chalk.green("Deleting all files in transform folder"));
-        deleteFilesInFolderSync(transformedFolderLocation);
+        deleteFilesInFolderSync(configOptions.transformedFolderLocation);
         console.log(
           chalk.green("All files deleted successfully in transform folder")
         );
@@ -137,4 +130,4 @@ Files to migrate manually - ${filesToMigrateManually.length}`)
   }
 }
 
-startTransformation(projectLocation);
+startTransformation(configOptions.projectLocation);

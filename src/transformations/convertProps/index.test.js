@@ -28,5 +28,7 @@ test("convert all props of vue which are in array", () => {
   const testFile = path.resolve(__dirname, "test2.vue");
   codemod.initialiseFile(testFile);
   const newSyntax = transformations.convertProps(codemod.transformationObject);
-  expect(newSyntax).toEqual(`const props = defineProps(['name', 'age'])`);
+  expect(newSyntax).toEqual(
+    `const props = defineProps(['name', 'age', "modelValue"])`
+  );
 });

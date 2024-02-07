@@ -13,6 +13,6 @@ test("convert emit to defineEmits", () => {
   codemod.initialiseFile(testFile);
   const newSyntax = transformations.convertEmit(codemod.transformationObject);
   expect(newSyntax).toBe(
-    `const emit = defineEmits(["close", "input", "on-change", "on-new-change"])`
+    `const emit = defineEmits(["close", "update:modelValue", "on-change", "on-new-change"])`
   );
 });

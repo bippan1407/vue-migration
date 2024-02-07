@@ -1,5 +1,5 @@
 const transform = ({ root, j }) => {
-  let emitNames = [];
+  let emitNames = new Set();
   root
     .find(j.Property, {
       key: { name: "emits" },
@@ -9,7 +9,7 @@ const transform = ({ root, j }) => {
       args.elements.forEach((elem) => {
         const emitName = elem.value;
         if (emitName) {
-          emitNames.push(emitName);
+          emitNames.add(emitName);
         }
       });
     });
@@ -22,10 +22,10 @@ const transform = ({ root, j }) => {
       const args = path.parent.value.arguments;
       const emitName = args?.[0]?.value;
       if (emitName) {
-        emitNames.push(emitName);
+        emitNames.add(emitName);
       }
     });
-  return emitNames;
+  return Array.from(emitNames);
 };
 
 module.exports = transform;

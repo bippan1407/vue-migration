@@ -13,6 +13,10 @@ export default {
         user: {
             type: Object,
             required: true
+        },
+        value: {
+            type: String,
+            required: true
         }
     },
     data() {
@@ -60,6 +64,13 @@ export default {
         onRedirect() {
             const devName = this.$store.getters['user/devName']
             this.$emit('on-redirect', { devName })
+            this.$emit('on-redirect', { devName })
+            this.$emit('on-redirect', { devName })
+            this.$emit('input', { devName })
+            this.$emit('input', { devName })
+            this.$emit('input', { devName })
+            this.$emit('input', { devName })
+            const inputValue = this.value
             this.$router.push('https://vuejs.org/')
         }
     },

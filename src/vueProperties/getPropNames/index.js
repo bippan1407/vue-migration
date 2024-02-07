@@ -1,12 +1,12 @@
 const transform = ({ root, j }) => {
-  let propNames = [];
+  let propNames = new Set();
   root
     .find(j.Property, {
       key: { name: "props" },
     })
     .forEach((path) => {
       path.value?.value?.properties?.forEach((property) => {
-        propNames.push(property.key.name);
+        propNames.add(property.key.name);
       });
     });
   // for array syntax
@@ -16,10 +16,10 @@ const transform = ({ root, j }) => {
     })
     .forEach((path) => {
       path.value?.value?.elements?.forEach((element) => {
-        propNames.push(element.value);
+        propNames.add(element.value);
       });
     });
-  return propNames;
+  return Array.from(propNames);
 };
 
 module.exports = transform;

@@ -9,7 +9,7 @@ import { useDevStore } from '~/store/dev'
 
 
 // #region emits
-const emit = defineEmits(["on-redirect"])
+const emit = defineEmits(["on-redirect", "update:modelValue"])
 // #endregion emits
 
 
@@ -21,6 +21,10 @@ const props = defineProps({
     },
     user: {
         type: Object,
+        required: true
+    },
+    modelValue: {
+        type: String,
         required: true
     }
 })
@@ -76,6 +80,13 @@ const onDescriptionChange = async () => {
 const onRedirect = () => {
     const devName = devName.value
     emit('on-redirect', { devName })
+    emit('on-redirect', { devName })
+    emit('on-redirect', { devName })
+    emit('input', { devName })
+    emit('input', { devName })
+    emit('input', { devName })
+    emit('input', { devName })
+    const inputValue = props.modelValue
     router.push('https://vuejs.org/')
 }
 
@@ -84,8 +95,7 @@ const onRedirect = () => {
 
 // #region lifecycle hooks
 onMounted(() =>  {
-    const response = //TODO Need to migrate manually
-    this.$axios.$get('/user')
+    const response = this.$axios.$get('/user')
     console.log('component mounted')
     //TODO Need to migrate manually
     this.$once('hook:beforDestroy', () => {

@@ -1,11 +1,13 @@
 const convertThisStoreGetters = require("../convertThisStoreGetters");
-const { getRefSyntax } = require("../../utility/vueThreeSyntax");
 const convertThisStoreDispatch = require("../convertThisStoreDispatch");
 const componentRefToRefs = require("../componentRefsToRef");
 const convertNuxtProperties = require("../convertNuxtProperties");
-const { nuxtPropertiesToConvert } = require("../../utility");
+const { newEmitSyntaxMapping } = require("../../constants/emitSyntax");
+const configOptionsService = require("../../configOptionsService");
+const { newPropSyntaxMapping } = require("../../constants/propSyntax");
 
 const transform = ({ root, j, vueFileData }) => {
+  let configOptions = configOptionsService().get();
   const propNames = vueFileData.propNames;
   const data = vueFileData.data;
   const computedNames = vueFileData.computedNames;
@@ -16,12 +18,18 @@ const transform = ({ root, j, vueFileData }) => {
   vuexStateGetters = Array.from(vuexStateGetters);
   convertNuxtProperties({ root, j });
   root.find(j.ThisExpression).forEach((path) => {
-    const propertyName = path.parent?.value?.property?.name;
+    let propertyName = path.parent?.value?.property?.name;
+    const args = path.parent.parent.value.args;
     if (!propertyName) {
       return;
     }
     if (propNames.includes(propertyName)) {
-      j(path.parent).replaceWith(`props.${propertyName}`);
+      const newPropNameForVue3 = newPropSyntaxMapping[propertyName];
+      if (newPropNameForVue3) {
+        j(path.parent).replaceWith(`props.${newPropNameForVue3}`);
+      } else {
+        j(path.parent).replaceWith(`props.${propertyName}`);
+      }
     } else if (
       data.includes(propertyName) ||
       computedNames.includes(propertyName) ||
@@ -35,16 +43,29 @@ const transform = ({ root, j, vueFileData }) => {
       j(path.parent).replaceWith(`${propertyName}`);
     } else if (["$emit"].includes(propertyName)) {
       j(path.parent).replaceWith(`emit`);
+      if (Array.isArray(args)) {
+        const [expression] = args;
+        if (
+          expression &&
+          expression.type === j.Literal.name &&
+          expression.value &&
+          newEmitSyntaxMapping[expression.value]
+        ) {
+          console.log(newEmitSyntaxMapping[expression.value]);
+          expression.value = newEmitSyntaxMapping[expression.value];
+        }
+      }
     } else if (["$refs"].includes(propertyName)) {
       componentRefToRefs({ root, j });
     } else if (["$axios"].includes(propertyName)) {
-      j(path.parent.parent).forEach((path) => {
-        path.value.comments = [
-          j.commentLine("TODO Need to migrate manually", false, true),
-        ];
-        // return j(path).toSource();
-      });
-    } else {
+      if (configOptions.commentAxios) {
+        j(path.parent.parent).forEach((path) => {
+          path.value.comments = [
+            j.commentLine("TODO Need to migrate manually", false, true),
+          ];
+        });
+      }
+    } else if (configOptions.commentOtherCode) {
       j(path.parent.parent).forEach((path) => {
         path.value.comments = [
           j.commentLine("TODO Need to migrate manually", false, true),
