@@ -8,6 +8,8 @@ const { newPropSyntaxMapping } = require("../../constants/propSyntax");
 
 const transform = ({ root, j, vueFileData }) => {
   let configOptions = configOptionsService().get();
+  const replaceThisExpressionConfigOptions =
+    configOptions.replaceThisExpression;
   const propNames = vueFileData.propNames;
   const data = vueFileData.data;
   const computedNames = vueFileData.computedNames;
@@ -23,7 +25,15 @@ const transform = ({ root, j, vueFileData }) => {
     if (!propertyName) {
       return;
     }
-    if (propNames.includes(propertyName)) {
+    if (
+      Object.keys(replaceThisExpressionConfigOptions).includes(propertyName)
+    ) {
+      const replaceThisExpressionWithConfigOptions =
+        replaceThisExpressionConfigOptions[propertyName];
+      j(path.parent).replaceWith(
+        replaceThisExpressionWithConfigOptions.replaceWith
+      );
+    } else if (propNames.includes(propertyName)) {
       const newPropNameForVue3 = newPropSyntaxMapping[propertyName];
       if (newPropNameForVue3) {
         j(path.parent).replaceWith(`props.${newPropNameForVue3}`);

@@ -7,6 +7,12 @@ let configOptions = {
   saveErrorLogs: false,
   commentAxios: true,
   commentOtherCode: true,
+  replaceThisExpression: {
+    // $axios: {
+    //   replaceWith: "$axios",
+    //   isPlugin: true,
+    // },
+  },
 };
 
 function configOptionsService() {

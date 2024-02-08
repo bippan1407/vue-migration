@@ -33,7 +33,7 @@ const props = defineProps({
 
 // #region nuxt properties
 const router = useRouter();
-
+const { $axios } = useNuxtApp()
 // #endregion nuxt properties
 
 // #region pinia state, getters and actions
@@ -95,7 +95,7 @@ const onRedirect = () => {
 
 // #region lifecycle hooks
 onMounted(() =>  {
-    const response = this.$axios.$get('/user')
+    const response = $axios.$get('/user')
     console.log('component mounted')
     //TODO Need to migrate manually
     this.$once('hook:beforDestroy', () => {

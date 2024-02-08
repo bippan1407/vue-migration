@@ -3,6 +3,7 @@ const getEmitNames = require("./getEmitNames");
 const getPropNames = require("./getPropNames");
 const getProperties = require("./getProperties");
 const getMethodNames = require("./getMethodNames");
+const getPluginNames = require("./getPluginNames");
 const getComputedNames = require("./getComputedNames");
 const getComponentRefs = require("./getComponentRefs");
 const getNuxtProperties = require("./getNuxtProperties");
@@ -15,6 +16,7 @@ module.exports = {
   getPropNames,
   getProperties,
   getMethodNames,
+  getPluginNames,
   getComponentRefs,
   getComputedNames,
   getNuxtProperties,

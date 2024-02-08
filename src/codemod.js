@@ -8,6 +8,7 @@ const {
   createActionsPiniaStore,
   generateCreatePiniaStoreSyntax,
   createVariableDeclarationSyntax,
+  createDeclarationSyntax,
 } = require("./utility/vueThreeSyntax");
 const {
   lifecycleHooks,
@@ -42,6 +43,7 @@ class Codemod {
     computedNames: [],
     methodNames: [],
     emitNames: [],
+    pluginNames: [],
     isRouterPresent: false,
     isDevicePresent: false,
     isRoutePresent: false,
@@ -130,6 +132,9 @@ class Codemod {
       this.transformationObject
     );
     this.vueFileData.emitNames = vueProperties.getEmitNames(
+      this.transformationObject
+    );
+    this.vueFileData.pluginNames = vueProperties.getPluginNames(
       this.transformationObject
     );
     this.vueFileData.isRouterPresent = vueProperties.getNuxtProperties(
@@ -331,6 +336,15 @@ class Codemod {
       syntax +=
         createVariableDeclarationSyntax("const", "device", "useDevice()") +
         "\n";
+    }
+    if (this.vueFileData.pluginNames.length > 0) {
+      syntax += createDeclarationSyntax(
+        this.vueFileData.pluginNames.map((p) => ({
+          name: p,
+        })),
+        "useNuxtApp()",
+        { spreadSyntax: true }
+      );
     }
     return syntax;
   };
