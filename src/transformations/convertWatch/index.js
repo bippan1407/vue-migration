@@ -20,8 +20,7 @@ const transform = ({ root, j, vueFileData }) => {
     })
     .forEach((path) => {
       path?.value?.value?.properties?.forEach((property) => {
-        let watcherName = property?.key?.name;
-        vueFileData;
+        let watcherName = property?.key?.name ?? property?.key?.value;
         if (vueFileData.propNames.includes(watcherName)) {
           watcherName = `props.${watcherName}`;
         }

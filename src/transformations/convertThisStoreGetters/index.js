@@ -7,7 +7,7 @@ const transform = ({ root, j }) => {
     })
     .forEach((path) => {
       const parent = path?.parent?.parent?.value?.property;
-      const isStore = path.parent.value.object.property.name === "$store";
+      const isStore = path.parent?.value?.object?.property?.name === "$store";
       if (parent && parent.value && isStore) {
         const [storeName, currentGetterName] = parent.value.split("/");
         j(path?.parent?.parent).replaceWith(getRefSyntax(currentGetterName));

@@ -7,11 +7,13 @@ const transform = ({ root, j }) => {
       property: { name: "$refs" },
     })
     ?.forEach((path) => {
-      let name = path.parent.node.property.name;
+      let name = path.parent?.node?.property?.name;
       if (!name) {
-        name = path.parent.node.property.value;
+        name = path.parent?.node?.property?.value;
       }
-      j(path.parent).replaceWith(() => getRefSyntax(name));
+      if(name) {
+        j(path.parent).replaceWith(() => getRefSyntax(name));
+      }
     });
 };
 

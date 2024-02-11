@@ -6,8 +6,10 @@ const transform = ({ root, j }) => {
       property: { name: "$refs" },
     })
     ?.forEach((path) => {
-      const name = path.parent.node.property.name;
-      refNames.add(name);
+      const name = path?.parent?.node?.property?.name;
+      if(name) {
+        refNames.add(name);
+      }
     });
   return Array.from(refNames);
 };

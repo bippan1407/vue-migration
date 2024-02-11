@@ -67,8 +67,8 @@ const transform = ({ root, j }) => {
           getterNames.forEach((getterName) => {
             const options = {};
             const [storeName, currentGetterName] =
-              getterName.value.value.split("/");
-            let asName = getterName.key.name;
+              getterName?.value?.value?.split("/") ?? [];
+            let asName = getterName?.key?.name;
             if (asName !== currentGetterName) {
               options.as = asName;
             }
