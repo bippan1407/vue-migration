@@ -4,6 +4,7 @@ const getPropNames = require("./getPropNames");
 const getProperties = require("./getProperties");
 const getMethodNames = require("./getMethodNames");
 const getPluginNames = require("./getPluginNames");
+const getCustomImports = require("./getCustomImports");
 const getComputedNames = require("./getComputedNames");
 const getComponentRefs = require("./getComponentRefs");
 const getNuxtProperties = require("./getNuxtProperties");
@@ -22,4 +23,5 @@ module.exports = {
   getNuxtProperties,
   getVuexGetterNames,
   getVuexActionNames,
+  getCustomImports,
 };

@@ -47,6 +47,7 @@ class Codemod {
     isRouterPresent: false,
     isDevicePresent: false,
     isRoutePresent: false,
+    importsToAdd: []
   };
   config = {
     importsToSkip: ["vuex"],
@@ -149,6 +150,8 @@ class Codemod {
       this.transformationObject,
       { nuxtPropertyName: "$device" }
     );
+    this.vueFileData.importsToAdd = vueProperties.getCustomImports(
+      this.transformationObject);
     // Handling edge cases
     if (
       (this.vueFileData.componentRefNames.length ||

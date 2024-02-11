@@ -1,3 +1,4 @@
+const configOptionsService = require("../../configOptionsService");
 const {
   createImportStoreSyntax,
   createImportSyntax,
@@ -33,7 +34,17 @@ const transform = ({ root, j, vueFileData, config }) => {
       importSyntax += createImportStoreSyntax(storeName) + "\n";
     });
   }
-
+  const configOptions = configOptionsService().get()
+  const imports = root.find(j.ImportDeclaration);
+    const expressionToReplace = configOptions.replaceThisExpression
+    Object.keys(expressionToReplace).map(k => {
+        if (expressionToReplace[k]?.isImport) {
+            imports[k] = expressionToReplace[k];
+        }
+    })
+    vueFileData.importsToAdd.forEach(i => {
+        importSyntax += expressionToReplace[i].importSyntax + '\n';
+    })
   return importSyntax;
 };
 
