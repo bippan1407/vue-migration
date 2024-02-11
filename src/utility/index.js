@@ -70,15 +70,15 @@ const allVueProperties = [
   ...notRequiredProperties,
 ];
 
-function readFilesRecursively(folderPath, fileCallback) {
+function readFilesRecursively(folderPath, options = { skipDir: [] }, fileCallback) {
   const files = fs.readdirSync(folderPath);
 
   files.forEach((fileName) => {
     const filePath = path.join(folderPath, fileName);
     const fileStat = fs.statSync(filePath);
-
-    if (fileStat.isDirectory()) {
-      readFilesRecursively(filePath, fileCallback);
+    const folderName = path.basename(folderPath)
+    if (fileStat.isDirectory() && !options.skipDir.includes(folderName) && folderName.charAt(0) !== '.') {
+      readFilesRecursively(filePath, options, fileCallback);
     } else if (fileStat.isFile()) {
       fileCallback(filePath);
     }

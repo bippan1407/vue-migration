@@ -50,6 +50,9 @@ const main = (file) => {
     console.log(chalk.greenBright("completed processing file - ", fileName));
     filesMigrated++;
   } catch (error) {
+    if (configOptions.isDev) {
+      console.log(error);
+    }
     console.log(
       chalk.redBright(
         "\nCould not process file - ",
@@ -105,7 +108,11 @@ function startTransformation(baseFolderLocation) {
   if (fs.statSync(baseFolderLocation).isFile()) {
     main(baseFolderLocation);
   } else {
-    readFilesRecursively(baseFolderLocation, main);
+    readFilesRecursively(
+      baseFolderLocation,
+      { skipDir: ["node_modules"] },
+      main
+    );
   }
 
   console.log(chalk.greenBright("\nProcess completed"));
@@ -115,10 +122,18 @@ Files successfully migrated - ${filesMigrated}
 Files to migrate manually - ${filesToMigrateManually.length}`)
   );
   if (filesToMigrateManually.length) {
-    const logFileLocation = path.join(
-      homeDirectory,
-      "files-to-migrate-manually.json"
-    );
+    let logFileLocation;
+    if (configOptions.saveErrorLogsFilePath) {
+      logFileLocation = path.join(
+        configOptions.saveErrorLogsFilePath,
+        "files-to-migrate-manually.json"
+      );
+    } else {
+      logFileLocation = path.join(
+        homeDirectory,
+        "files-to-migrate-manually.json"
+      );
+    }
     fs.writeFileSync(
       logFileLocation,
       JSON.stringify({ data: filesToMigrateManually })
