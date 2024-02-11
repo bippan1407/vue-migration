@@ -205,7 +205,7 @@ class Codemod {
             key: { name: propertyName },
           })
           .forEach((path) => {
-            const newSyntax = `// TODO Code to migrate manually
+            const newSyntax = `// Nuxt3TODO Code to migrate manually
             ${j(path).toSource()}
             `;
             this.transformationValues.codeToMigrateManually += newSyntax + "\n";
