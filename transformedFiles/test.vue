@@ -62,7 +62,7 @@ const nameAndDescription = computed(() => {
 
 
 // #region watch
-watch(description, (newValue,oldValue) => {
+watch(description, (newValue, oldValue) => {
     onDescriptionChange()
 })
 
@@ -94,14 +94,14 @@ const onRedirect = () => {
 
 
 // #region lifecycle hooks
-onMounted(() =>  {
+onMounted(() => {
     const response = $axios.$get('/user')
     console.log('component mounted')
-    //TODO Need to migrate manually
+    //Nuxt3TODO Need to migrate manually
     this.$once('hook:beforDestroy', () => {
     });
 })
-onDestroyed(() =>  {
+onDestroyed(() => {
     console.log('component destroyed')
 })
 
