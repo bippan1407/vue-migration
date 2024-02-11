@@ -5,6 +5,7 @@ const convertNuxtProperties = require("../convertNuxtProperties");
 const { newEmitSyntaxMapping } = require("../../constants/emitSyntax");
 const configOptionsService = require("../../configOptionsService");
 const { newPropSyntaxMapping } = require("../../constants/propSyntax");
+const { nuxtPropertiesToConvert } = require("../../utility");
 
 const transform = ({ root, j, vueFileData }) => {
   let configOptions = configOptionsService().get();
@@ -18,10 +19,14 @@ const transform = ({ root, j, vueFileData }) => {
   let vuexStateGetters = getVuexStateAndGetterArray(vueFileData.vuexGetters);
   let vuexActions = getVuexStateAndGetterArray(vueFileData.vuexActions);
   vuexStateGetters = Array.from(vuexStateGetters);
-  convertNuxtProperties({ root, j });
+  const expressionsToConvert = [
+    ...nuxtPropertiesToConvert,
+    ...vueFileData.importsToAdd,
+  ];
+  convertNuxtProperties({ root, j }, { properties: expressionsToConvert });
   root.find(j.ThisExpression).forEach((path) => {
-    let propertyName = path.parent?.value?.property?.name;
-    const args = path.parent.parent.value.args;
+    let propertyName = path?.parent?.value?.property?.name;
+    const args = path.parent?.parent?.value?.args;
     if (!propertyName) {
       return;
     }
@@ -30,9 +35,15 @@ const transform = ({ root, j, vueFileData }) => {
     ) {
       const replaceThisExpressionWithConfigOptions =
         replaceThisExpressionConfigOptions[propertyName];
-      j(path.parent).replaceWith(
-        replaceThisExpressionWithConfigOptions.replaceWith
-      );
+      if (replaceThisExpressionWithConfigOptions.replaceWith) {
+        j(path.parent).replaceWith(
+          replaceThisExpressionWithConfigOptions.replaceWith
+        );
+      } else if (replaceThisExpressionWithConfigOptions.replaceFunctionWith) {
+        j(path.parent.parent).replaceWith(
+          replaceThisExpressionWithConfigOptions.replaceFunctionWith
+        );
+      }
     } else if (propNames.includes(propertyName)) {
       const newPropNameForVue3 = newPropSyntaxMapping[propertyName];
       if (newPropNameForVue3) {
@@ -61,7 +72,6 @@ const transform = ({ root, j, vueFileData }) => {
           expression.value &&
           newEmitSyntaxMapping[expression.value]
         ) {
-          console.log(newEmitSyntaxMapping[expression.value]);
           expression.value = newEmitSyntaxMapping[expression.value];
         }
       }
@@ -71,16 +81,16 @@ const transform = ({ root, j, vueFileData }) => {
       if (configOptions.commentAxios) {
         j(path.parent.parent).forEach((path) => {
           path.value.comments = [
-            j.commentLine("TODO Need to migrate manually", false, true),
+            j.commentLine("Nuxt3TODO Need to migrate manually", false, true),
           ];
         });
       }
     } else if (configOptions.commentOtherCode) {
       j(path.parent.parent).forEach((path) => {
         path.value.comments = [
-          j.commentLine("TODO Need to migrate manually", false, true),
+          j.commentLine("Nuxt3TODO Need to migrate manually", false, true),
         ];
-        // return `// TODO Need to migrate manually
+        // return `// Nuxt3TODO Need to migrate manually
         // // ${j(path).toSource()}`;
       });
     }

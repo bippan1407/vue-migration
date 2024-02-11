@@ -23,7 +23,13 @@ const transform = ({ root, j }) => {
       else if (nonObjectParams) paramsSyntax = j(nonObjectParams).toSource();
 
       if (storeName && currentActionName) {
-        let newSyntax = getVuexActionSyntax(currentActionName, paramsSyntax);
+        let newSyntax = "";
+        if (path.value.name === "commit") {
+          newSyntax =
+            newSyntax +
+            "// Nuxt3TODO please review the below code as commit(mutation) does not exists in pinia \n";
+        }
+        newSyntax += getVuexActionSyntax(currentActionName, paramsSyntax);
         j(path?.parent?.parent).replaceWith(newSyntax);
       }
     });
