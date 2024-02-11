@@ -32,6 +32,7 @@ class Codemod {
     methods: "",
     codeToMigrateManually: "",
     imports: "",
+    head: "",
   };
   vueFileData = {
     vuexGetters: {},
@@ -47,7 +48,7 @@ class Codemod {
     isRouterPresent: false,
     isDevicePresent: false,
     isRoutePresent: false,
-    importsToAdd: []
+    importsToAdd: [],
   };
   config = {
     importsToSkip: ["vuex"],
@@ -68,6 +69,7 @@ class Codemod {
     methods: () => this.runTransformation.generateMethods(),
     lifecycleHooks: () => this.runTransformation.generateAllLifeCycleHooks(),
     watch: () => this.runTransformation.generateWatch(),
+    head: () => this.runTransformation.generateHead(),
   };
 
   initialiseFile = (
@@ -151,7 +153,8 @@ class Codemod {
       { nuxtPropertyName: "$device" }
     );
     this.vueFileData.importsToAdd = vueProperties.getCustomImports(
-      this.transformationObject);
+      this.transformationObject
+    );
     // Handling edge cases
     if (
       (this.vueFileData.componentRefNames.length ||
@@ -284,6 +287,12 @@ class Codemod {
         transformations.convertWatch(this.transformationObject)
       );
     },
+    generateHead: () => {
+      this.transformationValues.head = addCodeInRegion(
+        "head",
+        transformations.convertHead(this.transformationObject)
+      );
+    },
   };
 
   getSource() {
@@ -304,6 +313,7 @@ class Codemod {
   addSyntaxInOrder = () => {
     let order = [
       "imports",
+      "head",
       "layout",
       "emits",
       "props",
