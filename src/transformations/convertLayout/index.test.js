@@ -15,7 +15,8 @@ test("convert layout string expression to definePageMeta", () => {
     .convertLayout(codemod.transformationObject)
     ?.trim();
   expect(newSyntax).toEqual(`definePageMeta({
-    layout: "default"
+  layout: 'default',
+
 })`);
 });
 
@@ -25,6 +26,6 @@ test("convert layout function expression to definePageMeta", () => {
   const newSyntax = transformations
     .convertLayout(codemod.transformationObject)
     ?.trim();
-  expect(newSyntax).toEqual(`//TODO Need to migrate manually
+  expect(newSyntax).toEqual(`//Nuxt3TODO Need to migrate manually
 definePageMeta({})`);
 });
