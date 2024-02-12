@@ -48,11 +48,11 @@ export default {
             const newValue = documents.value
             dropdownOptions.value.style.setProperty('--dd-left', `-${left}px`);
             newUser.value;
-            // Nuxt3TODO please review the below code as commit(mutation) does not exists in pinia 
+            // TODO please review the below code as commit(mutation) does not exists in pinia 
             addUser();
             isKSUser.value;
             editUserDetails(payload);
-            //Nuxt3TODO Need to migrate manually
+            //TODO Need to migrate manually
             this.$axios.get('test')
                 .then((response) => {
                     console.log(response)

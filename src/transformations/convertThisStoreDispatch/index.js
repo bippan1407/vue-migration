@@ -27,7 +27,7 @@ const transform = ({ root, j }) => {
         if (path.value.name === "commit") {
           newSyntax =
             newSyntax +
-            "// Nuxt3TODO please review the below code as commit(mutation) does not exists in pinia \n";
+            "// TODO please review the below code as commit(mutation) does not exists in pinia \n";
         }
         newSyntax += getVuexActionSyntax(currentActionName, paramsSyntax);
         j(path?.parent?.parent).replaceWith(newSyntax);

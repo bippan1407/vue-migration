@@ -7,7 +7,7 @@ beforeEach(() => {
   codemod = new Codemod();
 });
 
-// Nuxt3TODO
+// TODO
 test("check if this.$test is present", () => {
   // const testFile = path.resolve(__dirname, "testRouter.vue");
   // codemod.initialiseFile(testFile);

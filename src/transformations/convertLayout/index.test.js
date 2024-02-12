@@ -26,6 +26,6 @@ test("convert layout function expression to definePageMeta", () => {
   const newSyntax = transformations
     .convertLayout(codemod.transformationObject)
     ?.trim();
-  expect(newSyntax).toEqual(`//Nuxt3TODO Need to migrate manually
+  expect(newSyntax).toEqual(`//TODO Need to migrate manually
 definePageMeta({})`);
 });

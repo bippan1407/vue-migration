@@ -97,7 +97,7 @@ const onRedirect = () => {
 onMounted(() => {
     const response = $axios.$get('/user')
     console.log('component mounted')
-    //Nuxt3TODO Need to migrate manually
+    //TODO Need to migrate manually
     this.$once('hook:beforDestroy', () => {
     });
 })

@@ -81,16 +81,16 @@ const transform = ({ root, j, vueFileData }) => {
       if (configOptions.commentAxios) {
         j(path.parent.parent).forEach((path) => {
           path.value.comments = [
-            j.commentLine("Nuxt3TODO Need to migrate manually", false, true),
+            j.commentLine("TODO Need to migrate manually", false, true),
           ];
         });
       }
     } else if (configOptions.commentOtherCode) {
       j(path.parent.parent).forEach((path) => {
         path.value.comments = [
-          j.commentLine("Nuxt3TODO Need to migrate manually", false, true),
+          j.commentLine("TODO Need to migrate manually", false, true),
         ];
-        // return `// Nuxt3TODO Need to migrate manually
+        // return `// TODO Need to migrate manually
         // // ${j(path).toSource()}`;
       });
     }

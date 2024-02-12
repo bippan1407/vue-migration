@@ -23,7 +23,7 @@ const transform = ({ root, j }) => {
       j.objectExpression([]),
     ]);
     newSyntax.comments = [
-      j.commentLine("Nuxt3TODO Need to migrate manually", false, true),
+      j.commentLine("TODO Need to migrate manually", false, true),
     ];
     definePageMetaSyntax += j(newSyntax).toSource();
   }
