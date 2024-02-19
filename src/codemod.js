@@ -181,6 +181,7 @@ class Codemod {
       this.transformationObject
     );
     transformations.convertThisExpression(this.transformationObject);
+    this.checkIfDataIsPresent();
     this.vueFileData.allProperties.forEach((propertyName) => {
       const isLifecycleHook = lifecycleHooks.includes(propertyName);
       const isNotrequiredProperties =
@@ -361,6 +362,12 @@ class Codemod {
     }
     return syntax;
   };
+
+  checkIfDataIsPresent() {
+    if (!this.vueFileData.allProperties.includes('data') && (Object.keys(this.vueFileData.vuexGetters).length || Object.keys(this.vueFileData.vuexActions).length || Object.keys(this.vueFileData.componentRefNames).length)) {
+      this.vueFileData.allProperties.push('data')
+    }
+  }
 }
 
 module.exports = Codemod;
