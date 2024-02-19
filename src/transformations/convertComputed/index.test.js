@@ -14,8 +14,16 @@ test("convert nuxt 2 computed to new  vue 3 syntax", () => {
   const newSyntax = transformations.convertComputed(
     codemod.transformationObject
   );
+  console.log(newSyntax)
   expect(newSyntax).toEqual(`const isPremiumUser = computed(() => {
     return this.isPremium;
+})
+const user = computed({
+    get() {
+        return ""
+    },
+    set(value) {
+    },
 })
 `);
 });

@@ -6,7 +6,14 @@ export default {
     computed: {
         isPremiumUser() {
             return this.isPremium;
-        }
+        },
+        user: {
+            get() {
+                return ""
+            },
+            set(value) {
+            },
+        },
     },
 }
 </script>
