@@ -2,7 +2,6 @@ const transform = ({ root, j }) => {
   let metaObj = "";
   root.find(j.Property).forEach((path) => {
     if (["layout", "middleware"].includes(path.value?.key?.name)) {
-      console.log(path);
       const tagName = path.value?.key?.name;
       if (path.value?.value?.elements) {
         metaObj += `${tagName}: [${j(

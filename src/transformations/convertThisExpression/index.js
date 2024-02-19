@@ -56,7 +56,7 @@ const transform = ({ root, j, vueFileData }) => {
       computedNames.includes(propertyName) ||
       vuexStateGetters.includes(propertyName)
     ) {
-      j(path.parent).replaceWith(`${propertyName}.value`);
+        j(path.parent).replaceWith(`${propertyName}.value`);
     } else if (
       methodNames.includes(propertyName) ||
       vuexActions.includes(propertyName)

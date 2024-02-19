@@ -21,6 +21,5 @@ test("remove this expression", () => {
   codemod.initialiseFile(testFile);
   transformations.convertThisExpression(codemod.transformationObject);
   const transformedValue = codemod.getSource().trim();
-  console.log(transformedValue);
   expect(transformedValue).toEqual(requiredSyntax);
 });
