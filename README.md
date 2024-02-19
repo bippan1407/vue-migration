@@ -219,4 +219,106 @@ onDestroyed(() => {
 })
 ```
 
+### Options
 
+Use config.json file when you have a lot of options to pass
+
+```
+ vue-migration --configLocation="/Users/bippan/Documents/migration.config.json"   
+```
+
+- isDev: boolean, default false 
+  - when you want to add see the errors on the console.
+- projectLocation: Array[string] | string
+  - can be location to file or folder
+- transformedFolderLocation: string
+  - when you want to save the changes to different folder.
+- dryRun: boolean, default true
+  - when you dont want to modify the current files
+- emptyTransformFolder: boolean, default false
+  - set to true if you want to delete the transformedFolderLocation files before adding new files to it.
+- saveErrorLogs: boolean, default false
+- saveErrorLogsFilePath: string
+  - if saveErrorLogs is set to true add folder location to save the file.
+- commentAxios: boolean, default true
+  - if you want to comment this.$axios syntax and want to replace manually
+- commentOtherCode - boolean, default true
+  - be default code which cannot cannot be converted will be commented with prefix TODO
+- replaceThisExpression: Array[object]
+  - if you want to replace ```this.$axios.gett()``` syntax to ```$axios.get()``` assumming  axios in plugin you can add object like ```"$axios": {
+          "replaceWith": "$axios",
+          "isPlugin": true
+        }
+        ```
+
+    New syntax that will be added
+    ```
+    const { $axios } = useNuxtApp()
+    $axios.get(...)
+    ```
+  - if you want to replace ```this.$nextTick``` syntax to ```nextTick``` you can add object like ```"$nextTick": {
+            "replaceWith": "nextTick",
+            "isPlugin": false
+        }```
+    
+    New syntax that will be added
+    ```
+    nextTick(() => {...})
+    ```
+  - if you want to add new import of your function you can add object like ```
+  "addValues": {
+            "replaceWith": "addValues",
+            "isPlugin": false,
+            "isImport": true,
+            "importSyntax": "import addValues from '~/utils/addValues'"
+        }```
+
+    New syntax that will be added
+    ```
+    import addValues from '~/utils/addValues'
+
+    ...
+
+    addValues(10,20)
+    ``` 
+
+
+all options
+
+```
+{
+    "isDev": true,
+    "projectLocation": "",
+    "transformedFolderLocation": null,
+    "dryRun": false,
+    "emptyTransformFolder": false,
+    "saveErrorLogs": true,
+    "saveErrorLogsFilePath": "",
+    "commentAxios": false,
+    "commentOtherCode": true,
+    "replaceThisExpression": {
+        "$axios": {
+          "replaceWith": "$axios",
+          "isPlugin": true
+        },
+        "$moment": {
+            "replaceWith": "$moment",
+            "isPlugin": true
+        },
+        "$dayjs": {
+            "replaceWith": "$dayjs",
+            "isPlugin": true
+        },
+        "$nextTick": {
+            "replaceWith": "nextTick",
+            "isPlugin": false
+        },
+        "addValues": {
+            "replaceWith": "addValues",
+            "isPlugin": false,
+            "isImport": true,
+            "importSyntax": "import addValues from '~/utils/addValues'"
+        }
+    }
+}
+```
