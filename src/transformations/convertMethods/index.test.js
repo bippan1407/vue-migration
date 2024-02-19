@@ -25,9 +25,9 @@ const multiply = async (a,b) => {
     const test = a * b;
     return test
 }
-const divide = async (a,{b}) => {
+const divide = async (a, {b}) => {
     const test = a / b;
     return test
-}
+} 
 `);
 });

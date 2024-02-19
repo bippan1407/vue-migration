@@ -11,13 +11,23 @@ const transform = ({ root, j }) => {
       properties = properties?.filter((prop) => prop.type === j.Property.name);
       if (properties) {
         properties.forEach((property) => {
-          const key = property?.key?.name;
-          const body = property?.value?.body;
-          const isAsync = property?.value?.async;
-          const params = property?.value?.params;
-          if (key && body) {
-            methods +=
-              createMethodsSyntax(key, body, params, { isAsync }) + "\n";
+          if(property?.value?.type === 'FunctionExpression') {
+            const key = property?.key?.name;
+            const body = property?.value?.body;
+            const isAsync = property?.value?.async;
+            const params = property?.value?.params;
+            if (key && body) {
+              methods +=
+                createMethodsSyntax(key, body, params, { isAsync }) + "\n";
+            }
+          } else if(["CallExpression", "ArrowFunctionExpression"].includes(property?.value?.type)) {
+            const key = property?.key?.name;
+            const body = property.value;
+            if (key && body) {
+              console.log(j(body).toSource())
+              methods +=
+                `const ${key} = ${j(body).toSource()} \n`;
+            }
           }
         });
       }

@@ -15,7 +15,7 @@ export default {
             const test = a * b;
             return test
         },
-        async divide(a, {b}) {
+        divide: async (a, {b}) => {
             const test = a / b;
             return test
         }
