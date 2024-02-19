@@ -145,4 +145,10 @@ Files to migrate manually - ${filesToMigrateManually.length}`)
   }
 }
 
-startTransformation(configOptions.projectLocation);
+if(Array.isArray(configOptions.projectLocation)) {
+  configOptions.projectLocation.forEach(fileLocation => {
+    startTransformation(fileLocation);
+  })
+} else {
+  startTransformation(configOptions.projectLocation);
+}
