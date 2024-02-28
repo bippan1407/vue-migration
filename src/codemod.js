@@ -33,6 +33,8 @@ class Codemod {
     codeToMigrateManually: "",
     imports: "",
     head: "",
+    provide: "",
+    inject: ""
   };
   vueFileData = {
     vuexGetters: {},
@@ -70,6 +72,8 @@ class Codemod {
     lifecycleHooks: () => this.runTransformation.generateAllLifeCycleHooks(),
     watch: () => this.runTransformation.generateWatch(),
     head: () => this.runTransformation.generateHead(),
+    provide: () => this.runTransformation.generateProvide(),
+    inject: () => this.runTransformation.generateInject()
   };
 
   initialiseFile = (
@@ -148,6 +152,13 @@ class Codemod {
       this.transformationObject,
       { nuxtPropertyName: "$route" }
     );
+    // TODO remove this
+    if (!this.vueFileData.isRoutePresent) {
+      this.vueFileData.isRoutePresent = vueProperties.getNuxtProperties(
+        this.transformationObject,
+        { nuxtPropertyName: "getRouteBaseName" }
+      );
+    }
     this.vueFileData.isDevicePresent = vueProperties.getNuxtProperties(
       this.transformationObject,
       { nuxtPropertyName: "$device" }
@@ -294,6 +305,18 @@ class Codemod {
         transformations.convertHead(this.transformationObject)
       );
     },
+    generateProvide: () => {
+      this.transformationValues.provide = addCodeInRegion(
+        "provide",
+        transformations.convertProvide(this.transformationObject)
+      );
+    },
+    generateInject: () => {
+      this.transformationValues.inject = addCodeInRegion(
+        "inject",
+        transformations.convertInject(this.transformationObject)
+      );
+    },
   };
 
   getSource() {
@@ -318,11 +341,13 @@ class Codemod {
       "layout",
       "emits",
       "props",
+      "inject",
       "data",
       "computed",
       "watch",
       "methods",
       "lifecycleHooks",
+      "provide",
       "codeToMigrateManually",
     ];
     let newUpdatedSyntax = "\n";
